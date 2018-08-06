@@ -1,19 +1,169 @@
 <template>
   <q-page>
-    <q-card class="bg-cyan-2 q-ma-xl">
-      <q-card-main>
-        <formBuilder1></formBuilder1>
-      </q-card-main>
-    </q-card>
+    <q-tabs color="secondary" glossy align="justify" v-model="selectedTab">
+        <q-tab slot="title" default name="QDes" icon="subject" label="QDesign"/>
+        <q-tab slot="title" v-if="tabWasLoaded" name="QDesPos" icon="subject" label="QDesignPost"/>
+      <!-- QDes Tab -->
+        <q-tab-pane name="QDes">
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-title>Form Designer - New Model
+              <span slot="subtitle">Design the form. Create the questions. Shape the flow with follow-up questions by ordering as desired.</span>
+            </q-card-title>
+            <q-btn class="q-ml-md" color="amber"  label="Start Again" @click="refreshPage"/>
+            <q-card-separator class="q-mb-md q-mt-xl"/>
+            <q-card-main>
+      <!-- QDes - Forms  -->
+            <div v-for="(form, fIndex) in forms" :key="form.id">
+              <q-field class="q-mb-sm" label="Form Title: " helper="Please enter the title of the form. This IS displayed to the user.">
+                <q-input v-model="form.fname" type="text" align="center" clearable />
+              </q-field>
+              <q-field class="q-mb-sm" label="Form Description: " helper="Please enter a description for the form. This IS displayed to the user.">
+                <q-input v-model="form.fDescription" type="textarea" rows="5" align="center" clearable />
+              </q-field>
+              <!-- <q-btn class="q-mt-sm" label="Add More Questions" color="blue" icon="add" @click="addRowQuestions(fIndex)" /> -->
+              <q-card-separator class="q-mb-md q-mt-lg"/>
+      <!-- QDes - Questions -->
+        <q-card class="bg-teal-1 q-mt-md q-mb-md">
+           <div v-for="(question, qIndex) in form.questions" :key="question.id">
+             <q-card-separator class="q-mb-md q-mt-lg"/>
+            <div class="row">
+              <div class="col-6">
+                <q-btn class="q-mb-md q-ml-sm" label="Add More Questions" color="blue" icon="add" @click="addRowQuestions(fIndex)" />
+              </div>
+              <div class="col-6">
+                <q-btn class="q-mb-md q-mr-sm" v-show="qIndex !==0" color="red-3" icon="remove" label="Remove this question" @click="remRowQs(fIndex, qIndex)" />
+              </div>
+            </div>
+            <q-field class="q-mb-sm q-mt-sm q-ml-sm q-mr-sm" label="Question ID: " helper="This automatically generated Question ID is editable. It is a REQUIRED field and must be UNIQUE. This IS displayed to the user.">
+              <q-input v-model="question.qId" type="text" align="center" @input="updtQTrk(fIndex, qIndex)"/>
+                <div v-show="question.showQIdError === true">
+                  <p style="color:red;">This field must be filled and unique.</p>
+                </div>
+            </q-field>
+            <q-field class="q-mb-sm q-mt-md q-ml-sm q-mr-sm" label="Question Type: " helper="Please select a question type. This IS NOT displayed to the user and is for INTERNAL use only.">
+              <q-select v-model="question.qType" :options="form.quSelOptions" />
+            </q-field>
+            <q-field class="q-mb-sm q-ml-sm q-mr-sm" label="Question: " helper="Please enter a question. This IS displayed to the user.">
+              <q-input v-model="question.qtext" type="textarea" rows="6" align="center" clearable />
+            </q-field>
+            <q-field class="q-mb-sm q-ml-sm q-mr-sm" label="Help: " helper="Please enter a description for any helper label. This IS displayed to the user.">
+              <q-input v-model="question.qHelp" type="text" align="center" clearable />
+            </q-field>
+             <q-field class="q-mb-sm q-ml-sm q-mr-sm" label="Default/Next Question ID: " helper="Please enter the next Question ID to proceed. Terminate the form either with the keyword ENDFORM or enter -1. This IS NOT displayed to the user and is for INTERNAL use only.">
+              <q-input v-model="question.nextDefaultId" type="text" align="center" clearable />
+                <div v-show="question.showNextQIdError === true">
+                  <p style="color:red;">This Question ID does not exist.</p>
+                </div>
+            </q-field>
+            <div  v-show="question.qType !== 'freetext'">
+            <q-card-separator class="q-mb-md q-mt-lg"/>
+            <q-btn class="q-ml-sm q-mt-sm" color="green" label="Add More Answers" icon="add" @click="addAnswerChoices(fIndex, qIndex)" />
+            </div>
+      <!-- QDes - Answers -->
+          <q-card class="bg-green-2 q-ml-md q-mt-lg q-mb-md q-mr-md">
+            <div  v-show="question.qType !== 'freetext'">
+              <div v-for="(answerChoice, aIndex) in question.answerChoices" :key="answerChoice.id">
+                <!-- <q-btn class="q-mb-md" round size="sm" color="green" icon="add" @click="addAnswerChoices(fIndex, qIndex, aIndex)" /> -->
+                <q-btn class="q-mb-md q-ml-md" v-show="aIndex !==0" color="green-3" icon="remove" label="Remove this answer" @click="remRowAns(fIndex, qIndex, aIndex)" />
+                <q-field class="q-mb-sm q-ml-sm q-mt-lg q-mr-sm" label="Answer Label: " helper="This Answer label is editable. This IS NOT displayed to the user and is for INTERNAL use only.." >
+                  <q-input v-model="answerChoice.answerId" type="text" align="center" clearable/>
+                    <div v-show="answerChoice.showAnswerLabelError === true">
+                      <p style="color:red;">This field must be filled and unique.</p>
+                    </div>
+                </q-field>
+                <q-field class="q-mb-sm q-ml-sm q-mr-sm" label="Answer Text: " helper="Please enter the answer text. e.g. Yes or No. This IS displayed to the user.">
+                  <q-input v-model="answerChoice.text" type="text" align="center" clearable />
+                </q-field>
+                <q-field class="q-mb-sm q-ml-sm q-mr-sm" label="Next Question ID: " helper="Please enter the next Question ID to proceed. Terminate the form either with the keyword ENDFORM or enter -1. This IS NOT displayed to the user and is for INTERNAL use only." >
+                  <q-input v-model="answerChoice.nextQuId" type="text" align="center" clearable />
+                </q-field>
+                <q-card-separator class="q-mb-md q-mt-lg"/>
+              </div>
+            </div>
+          </q-card>
+           </div>
+          </q-card>
+           </div>
+            </q-card-main>
+            <div class="row">
+              <div class="col-6">
+                <q-btn class="q-mb-md q-ml-md" color="orange" icon-right="save" @click="saveForm">Save the form locally</q-btn>
+              </div>
+              <div class="col-1"></div>
+              <div class="col-5">
+                <q-btn class="q-mb-md q-mr-md" color="red" icon-right="navigate_next" @click="genFormTapped">Generate the form</q-btn>
+              </div>
+              <!-- <q-btn class="q-mb-md" color="red" icon-right="navigate_next" @click="generateForm">Generate the form</q-btn> -->
+            </div>
+          <div v-show="showGenError=== true">
+            <p style="border:3px; border-style:solid;padding: 1em;color:red;">There are errors in this form. Please review that the following fields are valid: question, answer and next question. You won't be able to proceed until this is done.</p>
+          </div>
+          </q-card>
+        </q-tab-pane>
+      <!-- QDesPos Tab -->
+        <q-tab-pane name="QDesPos">
+            <q-card class="bg-light-blue-2 q-ma-xl">
+            <q-card-title>Resulting form
+              <span slot="subtitle">View the designed form.</span>
+              <q-btn class="float-right q-mr-md" color="black" label="load Test JSON" @click="testLoadJSON"/>
+            </q-card-title>
+            <q-card-separator class="q-mb-md q-mt-xl"/>
+            <q-card-main>
+          <!-- QDesPos - Forms  -->
+            <div v-for="(form) in forms" :key="form.id">
+              <q-field class="q-mb-sm" label="Form Title: " >
+                <q-input v-model="form.fname" />
+              </q-field>
+              <q-field class="q-mb-sm" label="Form Description: " >
+                <q-input v-model="form.fDescription" />
+              </q-field>
+              <q-card-separator class="q-mb-md q-mt-xl"/>
+          <!-- QDesPos - Questions -->
+              <q-card class="bg-teal-1 q-mt-lg q-mb-md">
+              <div v-for="(question, qIndex) in form.questions" :key="question.id">
+                <div  v-show="qIndex === indexToShow">
+                <q-field class="q-ml-md q-mt-md q-mb-md" label="Question Number: " >
+                  <q-input v-model="question.qId" align="center" readonly/>
+                </q-field>
+                <q-field class="q-ml-md q-mt-md q-mb-md" label="Question: " :helper="question.qHelp" >
+                  <q-input v-model="question.qtext" type="textarea" rows="6" align="center" readonly/>
+                </q-field>
+                <q-card-separator class="q-mb-md q-mt-md"/>
+          <!-- QDesPos - Answers -->
+                  <q-card class="bg-green-2 q-ml-md q-mt-lg q-mb-md q-mr-md">
+                  <div  v-show="question.qType === 'single'">
+                    <q-field class="q-ml-md q-mt-md q-mb-md" label="Please choose one of the following: " />
+                    <div v-for="(answerChoice) in question.answerChoices" :key="answerChoice.id">
+                        <q-radio class="q-ml-md q-mb-md" v-model="form.ansRadioVal" :val="answerChoice.answerId" :label=" answerChoice.text"/>
+                    </div>
+                  </div>
+                  <div  v-show="question.qType === 'freetext'">
+                      <q-field class="q-ml-md q-mt-md q-mb-md" label="Answer: " helper="Please write an answer." >
+                        <q-input class="q-mb-md" v-model="form.tempAnsHolder" align="center" type="textarea" rows="6" clearable/>
+                      </q-field>
+                  </div>
+                  </q-card>
+                  <div  v-show="showNextBtn">
+                  <q-btn class="q-ml-md q-mb-md q-mt-md" icon-right="navigate_next" color="blue-7" label="Next Question" @click="nextTapped(question.qType)"/>
+                  </div>
+                  <q-card-separator class="q-mb-md q-mt-sm"/>
+                </div>
+              </div>
+              </q-card>
+            </div>
+             <div  v-show="showFinishBtn">
+              <q-btn class="q-mr-md q-mb-md float-right" icon-right="done_all" color="red-7" label="Finish" @click="finishForm"/>
+            </div>
+            </q-card-main>
+            <q-btn class="q-ml-md q-mb-md q-mt-md" color="amber-5" icon="navigate_before" @click="goBack">Go Back to Designer</q-btn>
+            </q-card>
+        </q-tab-pane>
+      </q-tabs>
   </q-page>
 </template>
 
 <script>
-import formBuilder from 'components/formBuilder.vue'
 export default {
-  components: {
-    'formBuilder1': formBuilder
-  },
   data () {
     return {
       currFIndex: 0,
