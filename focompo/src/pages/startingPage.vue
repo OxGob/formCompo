@@ -6,7 +6,7 @@
         <!-- <q-field class="q-mb-sm" label="Form Title: " helper="Please enter the title of the form. This IS displayed to the user.">
             <q-input v-model="forms.fname" type="text" align="center" clearable />
           </q-field> -->
-        <compTestG1 @chiFoTitle="forms.fname = $event"></compTestG1>
+        <compTestG1 @chiFoTitle="forms.fname = $event" @chiFoDescr="forms.fDescription = $event"></compTestG1>
         <!-- <compTestG1 :forms.fname /> -->
       </q-card-main>
     </q-card>
@@ -28,7 +28,9 @@ export default {
         {
           fDescription: '',
           fname: ''
-        }
+        },
+      tesSeveral: {
+      }
     }
   }
 }
