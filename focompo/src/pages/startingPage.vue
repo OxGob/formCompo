@@ -31,8 +31,8 @@ export default {
           fDescription: '',
           fname: ''
         },
-      tesSeveral: {
-      }
+      tesSeveral: [{
+      }]
     }
   }
 }
