@@ -3,10 +3,10 @@
     <q-card class="bg-cyan-2 q-ma-xl">
       <q-card-main>
         <!-- <formBuilder1></formBuilder1> -->
-        <q-field class="q-mb-sm" label="Form Title: " helper="Please enter the title of the form. This IS displayed to the user.">
+        <!-- <q-field class="q-mb-sm" label="Form Title: " helper="Please enter the title of the form. This IS displayed to the user.">
             <q-input v-model="forms.fname" type="text" align="center" clearable />
-          </q-field>
-        <compTestG1></compTestG1>
+          </q-field> -->
+        <compTestG1 @chiFoTitle="forms.fname = $event"></compTestG1>
         <!-- <compTestG1 :forms.fname /> -->
       </q-card-main>
     </q-card>
@@ -23,6 +23,7 @@ export default {
   },
   data () {
     return {
+      someT: '',
       forms:
         {
           fDescription: '',
