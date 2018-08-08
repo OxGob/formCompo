@@ -2,15 +2,15 @@
   <q-page>
     <q-card class="bg-cyan-2 q-ma-xl">
       <q-card-main>
-        <div v-for="(foG, formInd) in formsg" :key=foG.id>
+        <div v-for="(formG, formInd) in formsg" :key=formG.id>
           <div class="q-mb-md q-mt-lg">
             <q-btn label="Add Form" color = "amber" @click="addFormTapped(formInd)"/>
             <q-btn class="q-ml-md" v-show="formInd !==0" label="Remove Form" color = "pink" @click="removeForm(formInd)"/>
           </div>
           <q-field class="q-mb-sm" label="Form Label: ">
-            <q-input v-model="foG.formLabel" type="text" align="center" clearable />
+            <q-input v-model="formG.formLabel" type="text" align="center" clearable />
           </q-field>
-          <compTestG1 @chiObjFo="foG.formComponentObj = $event"></compTestG1>
+          <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
           <q-card-separator class="q-mb-md q-mt-lg"/>
         </div>
         <!-- <compTestG1 @chiFoTitle="forms.fname = $event"

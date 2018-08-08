@@ -418,9 +418,9 @@ export default {
       location.reload(true)
     },
     emitToParentObj () {
-      this.$q.notify('emit to Parent as object Fired 2:' + this.fo)
-      console.log('Emit fo  Obj is : ', this.formG)
-      this.$emit('chiObjFo', this.formG)
+      this.$q.notify('emit to Parent as object Fired 2:' + this.form)
+      console.log('Emit fo  Obj is : ', this.form)
+      this.$emit('chiObjForm', this.form)
     },
     // TESTING METHODS
     // This function is called from the design form
