@@ -15,14 +15,14 @@
              <q-card-separator class="q-mb-md q-mt-lg"/>
             <div class="row">
               <div class="col-6">
-                <q-btn class="q-mb-md q-ml-sm" label="Add More Questions" color="blue" icon="add" @click="addRowQuestions(fIndex)" />
+                <q-btn class="q-mb-md q-ml-sm" label="Add More Questions" color="blue" icon="add" @click="addRowQuestions()" />
               </div>
               <div class="col-6">
-                <q-btn class="q-mb-md q-mr-sm" v-show="qIndex !==0" color="red-3" icon="remove" label="Remove this question" @click="remRowQs(fIndex, qIndex)" />
+                <q-btn class="q-mb-md q-mr-sm" v-show="qIndex !==0" color="red-3" icon="remove" label="Remove this question" @click="remRowQs(qIndex)" />
               </div>
             </div>
             <q-field class="q-mb-sm q-mt-sm q-ml-sm q-mr-sm" label="Question ID: " helper="This automatically generated Question ID is editable. It is a REQUIRED field and must be UNIQUE. This IS displayed to the user.">
-              <q-input v-model="question.qId" type="text" align="center" @input="updtQTrk(fIndex, qIndex)"/>
+              <q-input v-model="question.qId" type="text" align="center" @input="updtQTrk(qIndex)"/>
                 <div v-show="question.showQIdError === true">
                   <p style="color:red;">This field must be filled and unique.</p>
                 </div>
@@ -44,14 +44,13 @@
             </q-field>
             <div  v-show="question.qType !== 'freetext'">
             <q-card-separator class="q-mb-md q-mt-lg"/>
-            <q-btn class="q-ml-sm q-mt-sm" color="green" label="Add More Answers" icon="add" @click="addAnswerChoices(fIndex, qIndex)" />
+            <q-btn class="q-ml-sm q-mt-sm" color="green" label="Add More Answers" icon="add" @click="addAnswerChoices(qIndex)" />
             </div>
       <!-- QDes - Answers -->
           <q-card class="bg-green-2 q-ml-md q-mt-lg q-mb-md q-mr-md">
             <div  v-show="question.qType !== 'freetext'">
               <div v-for="(answerChoice, aIndex) in question.answerChoices" :key="answerChoice.id">
-                <!-- <q-btn class="q-mb-md" round size="sm" color="green" icon="add" @click="addAnswerChoices(fIndex, qIndex, aIndex)" /> -->
-                <q-btn class="q-mb-md q-ml-md" v-show="aIndex !==0" color="green-3" icon="remove" label="Remove this answer" @click="remRowAns(fIndex, qIndex, aIndex)" />
+                <q-btn class="q-mb-md q-ml-md" v-show="aIndex !==0" color="green-3" icon="remove" label="Remove this answer" @click="remRowAns(qIndex, aIndex)" />
                 <q-field class="q-mb-sm q-ml-sm q-mt-lg q-mr-sm" label="Answer Label: " helper="This Answer label is editable. This IS NOT displayed to the user and is for INTERNAL use only.." >
                   <q-input v-model="answerChoice.answerId" type="text" align="center" clearable/>
                     <div v-show="answerChoice.showAnswerLabelError === true">
@@ -70,7 +69,19 @@
           </q-card>
            </div>
           </q-card>
-        <!-- QDes - Answers -->
+        <!-- QDes - final section -->
+          <div class="row">
+              <div class="col-6">
+                <q-btn class="q-mb-md q-ml-md" color="orange" icon-right="save" @click="saveForm">Save the form locally</q-btn>
+              </div>
+              <div class="col-1"></div>
+              <div class="col-5">
+                <q-btn class="q-mb-md q-mr-md" color="red" icon-right="navigate_next" @click="genFormTapped">Generate the form</q-btn>
+              </div>
+            </div>
+          <div v-show="showGenError=== true">
+            <p style="border:3px; border-style:solid;padding: 1em;color:red;">There are errors in this form. Please review that the following fields are valid: question, answer and next question. You won't be able to proceed until this is done.</p>
+          </div>
             <q-btn class="q-ml-lg" label="Save Form / Fire Obj" color="purple" @click="emitToParentObj"/>
         </q-card-main>
     </q-card>
@@ -147,11 +158,11 @@ export default {
     // Add Remove Functions Section
     // This function allows questions to be added. --> Pre-GEN 1
     addRowQuestions () {
-      this.forms[fIndex].counterGenQuID++
-      this.forms[fIndex].questions.push({
+      this.form.counterGenQuID++
+      this.form.questions.push({
         qtext: '',
         qHelp: '',
-        qId: 'Question ' + this.forms[fIndex].counterGenQuID,
+        qId: 'Question ' + this.form.counterGenQuID,
         nextDefaultId: '',
         qType: 'single',
         answerChoices: [
@@ -172,39 +183,39 @@ export default {
         showNextQIdError: false,
         showQIdError: false
       })
-      this.addTrackQuId(fIndex)
+      this.addTrackQuId()
     },
     // This function allows answer choices per question to be added. --> Pre-GEN 2
-    addAnswerChoices (fIndex, qIndex) {
-      this.forms[fIndex].questions[qIndex].counterAnsChID++
-      var newAnsLabel = this.forms[fIndex].questions[qIndex].counterAnsChID + 1
-      this.forms[fIndex].questions[qIndex].answerChoices.push({
+    addAnswerChoices (qIndex) {
+      this.form.questions[qIndex].counterAnsChID++
+      var newAnsLabel = this.form.questions[qIndex].counterAnsChID + 1
+      this.form.questions[qIndex].answerChoices.push({
         answerId: 'Answer ' + newAnsLabel,
         text: '',
         nextQuId: '',
         showAnswerLabelError: false
       })
-      this.addTrackAnsId(fIndex, qIndex)
+      this.addTrackAnsId(qIndex)
     },
     // This function allows the selected question to be removed. --> Pre-GEN 3
-    remRowQs (fIndex, qIndex) {
-      this.forms[fIndex].questions.splice(qIndex, 1)
+    remRowQs (qIndex) {
+      this.form.questions.splice(qIndex, 1)
       // remove the selected index from the question tracking Array
-      this.forms[fIndex].qTrackingID.splice(qIndex, 1)
+      this.form.qTrackingID.splice(qIndex, 1)
       // In the tracking array, update the question index for those removed AFTER SPLICE
-      var lengthOfTrackerAfterSplice = Object.keys(this.forms[fIndex].qTrackingID).length
+      var lengthOfTrackerAfterSplice = Object.keys(this.form.qTrackingID).length
       if (qIndex < lengthOfTrackerAfterSplice) {
       // If qIndex is NOT LAST, then from qIndex position till last, subtract 1 from values of quesIndex
         var i
         for (i = qIndex; i < lengthOfTrackerAfterSplice; i++) {
-          var fn = this.forms[fIndex].qTrackingID[i].quesIndex - 1
-          this.forms[fIndex].qTrackingID[i].quesIndex = fn
+          var fn = this.form.qTrackingID[i].quesIndex - 1
+          this.form.qTrackingID[i].quesIndex = fn
         }
       }
     },
     // This function allows the selected answer to be removed. --> Pre-GEN 4
-    remRowAns (fIndex, qIndex, aIndex) {
-      var pos = this.forms[fIndex].questions[qIndex]
+    remRowAns (qIndex, aIndex) {
+      var pos = this.form.questions[qIndex]
       pos.answerChoices.splice(aIndex, 1)
       // remove the selected index from the answer tracking Array
       pos.ansTrackingID.splice(aIndex, 1)
@@ -249,29 +260,29 @@ export default {
     },
     // TRACKING ARRAYS METHODS
     // This function updates the Question tracking index. Called by addRowQuestions(). --> Pre-GEN 7
-    addTrackQuId (fIndex) {
-      var qObj = this.forms[fIndex].questions
+    addTrackQuId () {
+      var qObj = this.form.questions
       // to get last index, need length of object as we always add to last index
       var lastIndexQObj = Object.keys(qObj).length - 1
-      this.forms[fIndex].qTrackingID.push({
-        quesID: this.forms[fIndex].questions[lastIndexQObj].qId,
+      this.form.qTrackingID.push({
+        quesID: this.form.questions[lastIndexQObj].qId,
         quesIndex: lastIndexQObj
       })
     },
     // This function updates the Answer tracking index. Called by addAnswerChoices() --> Pre-GEN 8
-    addTrackAnsId (fIndex, qIndex) {
-      var aObj = this.forms[fIndex].questions[qIndex].answerChoices
+    addTrackAnsId (qIndex) {
+      var aObj = this.form.questions[qIndex].answerChoices
       // to get last index, need length of object as we always add to last index
       var lastIndexAObj = Object.keys(aObj).length - 1
-      this.forms[fIndex].questions[qIndex].ansTrackingID.push({
-        ansID: this.forms[fIndex].questions[qIndex].answerChoices[lastIndexAObj].answerId,
+      this.form.questions[qIndex].ansTrackingID.push({
+        ansID: this.form.questions[qIndex].answerChoices[lastIndexAObj].answerId,
         ansIndex: lastIndexAObj
       })
     },
     // This function is called to update the qTrackingID. --> Pre-GEN 9
-    updtQTrk (fIndex, qIndex) {
+    updtQTrk (qIndex) {
       // on user updating the question.qId model
-      this.forms[fIndex].qTrackingID[qIndex].quesID = this.forms[fIndex].questions[qIndex].qId
+      this.form.qTrackingID[qIndex].quesID = this.form.questions[qIndex].qId
     },
     // Check Methods
     // This function checks the next Qu Id to either end or proceed. Called by searchNextQuestion().  --> Pre-GEN 10
@@ -288,7 +299,7 @@ export default {
     // This function checks if the question id is empty or a duplicate. Flags false. Called by genFormTapped()  --> Pre-GEN 11
     checkGenQ: function () {
       // ALGO --> If either next QuesId does not exist or is duplicate, return false
-      var arrTk = this.forms[this.currFIndex].qTrackingID
+      var arrTk = this.form.qTrackingID
       var i, j
       var lenA = arrTk.length
       var errQu = [] // // Stores index of question for empty or duplicate Ans Cho labels
@@ -317,9 +328,8 @@ export default {
       // 1. use defId from questions.defaultId. Cycle through questions []
       // 2. For each question, get the def id. Check this against the tracking q id. Also check for infinite loop.
       // 3. If the next def id doesn't exist, then in error array, add the index of the question
-      var fIndex = this.currFIndex
-      var quArr = this.forms[fIndex].questions
-      var arrTk = this.forms[fIndex].qTrackingID
+      var quArr = this.form.questions
+      var arrTk = this.form.qTrackingID
       var lenQ = quArr.length
       var lenA = arrTk.length
       var errNxtQu = [] // Stores index of question for non-existent or looping next def id
@@ -344,7 +354,7 @@ export default {
           }
         }
         // Check Next Question Id of Answer Choice for each Question
-        var ansChArr = this.forms[fIndex].questions[i].answerChoices
+        var ansChArr = this.form.questions[i].answerChoices
         var lenAn = ansChArr.length
         for (k = 0; k < lenAn; k++) {
           var fieldNxtId = ansChArr[k].nextQuId.toUpperCase().replace(/ /g, '')
@@ -411,7 +421,7 @@ export default {
     // TESTING METHODS
     // This function is called from the design form and saves a newly created JSON into a local file for testing. --> Pre-GEN 15
     saveForm () {
-      const jsonData = JSON.stringify(this.forms[this.currFIndex])
+      const jsonData = JSON.stringify(this.form)
       console.log('jSON Data is: ', jsonData)
       localStorage.setItem('testCOPDQ', jsonData)
     }
