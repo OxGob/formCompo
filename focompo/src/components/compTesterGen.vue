@@ -231,7 +231,8 @@ export default {
       }
     },
     // Navigation Methods
-    // Function called by button click before generating form. If validation passes, call generateForm () --> Pre-GEN 5
+    // Function called by button click before generating form.
+    // If validation passes, call generateForm () --> Pre-GEN 5
     genFormTapped () {
       // Get following error arrays: [errNxtQu, errAnChNx, errAnChLab], errQu
       // Get length of error array. Proceed to generate form ONLY IF all error arrays are false (i.e. length of 0)
@@ -285,7 +286,8 @@ export default {
       this.form.qTrackingID[qIndex].quesID = this.form.questions[qIndex].qId
     },
     // Check Methods
-    // This function checks the next Qu Id to either end or proceed. Called by searchNextQuestion().  --> Pre-GEN 10
+    // This function checks the next Qu Id to either end or proceed.
+    // Called by searchNextQuestion().  --> Pre-GEN 10
     checkNextQId (qIdCheck) {
       // if there is a keyword, call finish. Otherwise proceed to get next question id
       if (qIdCheck.toUpperCase() === 'ENDFORM' || qIdCheck === '-1') {
@@ -296,7 +298,8 @@ export default {
       }
     },
     // Validation Methods - Fields
-    // This function checks if the question id is empty or a duplicate. Flags false. Called by genFormTapped()  --> Pre-GEN 11
+    // This function checks if the question id is empty or a duplicate. Flags false.
+    // Called by genFormTapped()  --> Pre-GEN 11
     checkGenQ: function () {
       // ALGO --> If either next QuesId does not exist or is duplicate, return false
       var arrTk = this.form.qTrackingID
@@ -380,7 +383,8 @@ export default {
       errAnChNx = Array.from(new Set(errAnChNx.map(JSON.stringify))).map(JSON.parse)
       return [errNxtQu, errAnChNx, errAnChLab]
     },
-    // This function checks if the answer choice label is empty or unique. Returns an error array. Called by checkNextDefId()  --> Pre-GEN 13
+    // This function checks if the answer choice label is empty or unique.
+    // Returns an error array. Called by checkNextDefId()  --> Pre-GEN 13
     checkAnsCh: function (i, ansChArr, lenAn, errAnsChLab) {
       // ALGO --> If either duplicate Ans Label or next QId does not exist, return error array with empty and duplicates Answer Label
       var j, k
@@ -419,7 +423,8 @@ export default {
       this.$emit('chiObjFo', this.formG)
     },
     // TESTING METHODS
-    // This function is called from the design form and saves a newly created JSON into a local file for testing. --> Pre-GEN 15
+    // This function is called from the design form
+    // and saves a newly created JSON into a local file for testing. --> Pre-GEN 15
     saveForm () {
       const jsonData = JSON.stringify(this.form)
       console.log('jSON Data is: ', jsonData)

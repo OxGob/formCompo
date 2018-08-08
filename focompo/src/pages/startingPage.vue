@@ -19,16 +19,21 @@
         <!-- <compTestG1 :forms.fname /> -->
       </q-card-main>
     </q-card>
+    <q-card>
+      <compoTestV></compoTestV>
+    </q-card>
   </q-page>
 </template>
 
 <script>
 import formBuilder from 'components/formBuilder.vue'
 import compTestG from 'components/compTesterGen.vue'
+import comTesV from 'components/compTestView.vue'
 export default {
   components: {
     'formBuilder1': formBuilder,
-    'compTestG1': compTestG
+    'compTestG1': compTestG,
+    'compoTestV': comTesV
   },
   data () {
     return {
