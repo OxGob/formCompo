@@ -20,7 +20,7 @@
       </q-card-main>
     </q-card>
     <q-card>
-      <compoTestV :testvalFromParent='testval'></compoTestV>
+      <compoTestV :testvalFromParent='this.testval'></compoTestV>
     </q-card>
   </q-page>
 </template>
@@ -38,7 +38,7 @@ export default {
   data () {
     return {
       counterFormsg: 0,
-      testval: 'someting22',
+      testval: [{test: 'sometng29'}],
       formsg: [
         {
           formLabel: 'form 0',

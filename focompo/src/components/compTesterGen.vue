@@ -79,9 +79,9 @@
                 <q-btn class="q-mb-md q-mr-md" color="red" icon-right="navigate_next" @click="genFormTapped">Generate the form</q-btn>
               </div>
             </div>
-          <div v-show="showGenError=== true">
+          <!-- <div v-show="showGenError=== true">
             <p style="border:3px; border-style:solid;padding: 1em;color:red;">There are errors in this form. Please review that the following fields are valid: question, answer and next question. You won't be able to proceed until this is done.</p>
-          </div>
+          </div> -->
             <q-btn class="q-ml-lg" label="Save Form / Fire Obj" color="purple" @click="emitToParentObj"/>
         </q-card-main>
     </q-card>
