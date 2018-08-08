@@ -68,10 +68,8 @@ export default {
       currAIndex: 0,
       indexToShow: 0,
       selectedTab: 'QDes',
-      showGenError: false,
       showNextBtn: true,
       showFinishBtn: false,
-      tabWasLoaded: false,
       forms: [
         {
           ansRadioVal: '',
@@ -83,7 +81,6 @@ export default {
               timeStamp: ''
             }
           ],
-          counterGenQuID: 0,
           counterAnswers: 0,
           fDescription: '',
           fname: '',
@@ -101,16 +98,7 @@ export default {
                   nextQuId: '',
                   showAnswerLabelError: false
                 }
-              ],
-              ansTrackingID: [
-                {
-                  ansID: 'Answer 1',
-                  ansIndex: 0
-                }
-              ],
-              counterAnsChID: 0,
-              showNextQIdError: false,
-              showQIdError: false
+              ]
             }
           ],
           qTrackingID: [
@@ -119,18 +107,7 @@ export default {
               quesIndex: 0
             }
           ],
-          quSelOptions: [
-            {
-              label: 'Freetext',
-              value: 'freetext'
-            },
-            {
-              label: 'Single choice',
-              value: 'single'
-            }
-          ],
-          tempAnsHolder: '',
-          trackQuID: ''
+          tempAnsHolder: ''
         }
       ]
     }
@@ -140,7 +117,6 @@ export default {
     // Function called  by button click to return to form builder from Gen view. --> Pos-VIE 1
     goBack () {
       this.selectedTab = 'QDes'
-      this.tabWasLoaded = false
       this.showNextBtn = true
       this.showFinishBtn = false
       this.reset()
@@ -309,6 +285,10 @@ export default {
       var tmpH = localStorage.getItem('testCOPDQ')
       var objTm = JSON.parse(tmpH)
       this.forms[this.currFIndex] = objTm
+    },
+    emitToParentObjOnFinish () {
+    // Emit the answers object
+      this.$q.notify('emit to Parent on finish: ')
     }
   }
 }
