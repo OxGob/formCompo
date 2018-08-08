@@ -10,6 +10,7 @@
           <q-field class="q-mb-sm" label="Form Label: ">
             <q-input v-model="foG.formLabel" type="text" align="center" clearable />
           </q-field>
+          <compTestG1 @chiObjFo="foG.formComponentObj = $event"></compTestG1>
           <q-card-separator class="q-mb-md q-mt-lg"/>
         </div>
         <!-- <compTestG1 @chiFoTitle="forms.fname = $event"
@@ -35,6 +36,7 @@ export default {
       formsg: [
         {
           formLabel: 'form 0',
+          formComponentObj: '',
           indexFo: 0
         }
       ],
@@ -61,6 +63,7 @@ export default {
     addFormRow (formInd) {
       this.formsg.push({
         formLabel: 'Form ' + this.counterFormsg,
+        formComponentObj: '',
         indexFo: this.counterFormsg
       })
       this.updtFormTrackerAdd(formInd)

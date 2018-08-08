@@ -20,7 +20,6 @@
               <q-field class="q-mb-sm" label="Form Description: " helper="Please enter a description for the form. This IS displayed to the user.">
                 <q-input v-model="form.fDescription" type="textarea" rows="5" align="center" clearable />
               </q-field>
-              <!-- <q-btn class="q-mt-sm" label="Add More Questions" color="blue" icon="add" @click="addRowQuestions(fIndex)" /> -->
               <q-card-separator class="q-mb-md q-mt-lg"/>
       <!-- QDes - Questions -->
         <q-card class="bg-teal-1 q-mt-md q-mb-md">
