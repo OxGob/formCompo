@@ -40,8 +40,6 @@ export default {
           indexFo: 0
         }
       ],
-      tesSeveral: [{
-      }],
       formTracker: [
         {
           formTkID: 'form 0',
