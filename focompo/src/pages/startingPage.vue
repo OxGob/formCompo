@@ -1,11 +1,8 @@
 <template>
   <q-page>
-    <q-card class="bg-cyan-2 q-ma-xl">
+    <q-card class="bg-grey-5 q-ma-xl">
       <q-card-main>
-        <!-- <formBuilder1></formBuilder1> -->
-        <!-- <q-field class="q-mb-sm" label="Form Title: " helper="Please enter the title of the form. This IS displayed to the user.">
-            <q-input v-model="forms.fname" type="text" align="center" clearable />
-          </q-field> -->
+        <q-btn label="Add Form" color = "amber" @click="addFormTapped"/>
         <compTestG1 @chiFoTitle="forms.fname = $event"
          @chiFoDescr="forms.fDescription = $event"
          @chiObjFo="tesSeveral = $event"></compTestG1>
@@ -33,6 +30,11 @@ export default {
         },
       tesSeveral: [{
       }]
+    }
+  },
+  methods: {
+    addFormTapped () {
+      this.$q.notify('Form added')
     }
   }
 }
