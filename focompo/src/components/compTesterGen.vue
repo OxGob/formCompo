@@ -50,7 +50,7 @@
           <q-card class="bg-green-2 q-ml-md q-mt-lg q-mb-md q-mr-md">
             <div  v-show="question.qType !== 'freetext'">
               <div v-for="(answerChoice, aIndex) in question.answerChoices" :key="answerChoice.id">
-                <q-btn class="q-mb-md q-ml-md" v-show="aIndex !==0" color="green-3" icon="remove" label="Remove this answer" @click="remRowAns(qIndex, aIndex)" />
+                <q-btn class="q-mb-md q-ml-md" v-show="aIndex !==0" color="green-3" icon="remove" label="Remove this answer" @click="remRowAnsCh(qIndex, aIndex)" />
                 <q-field class="q-mb-sm q-ml-sm q-mt-lg q-mr-sm" label="Answer Label: " helper="This Answer label is editable. This IS NOT displayed to the user and is for INTERNAL use only.." >
                   <q-input v-model="answerChoice.answerId" type="text" align="center" clearable/>
                     <div v-show="answerChoice.showAnswerLabelError === true">
@@ -122,7 +122,7 @@ export default {
                   showAnswerLabelError: false
                 }
               ],
-              ansTrackingID: [
+              ansChTrkID: [
                 {
                   ansID: 'Answer 1',
                   ansIndex: 0
@@ -173,7 +173,7 @@ export default {
             showAnswerLabelError: false
           }
         ],
-        ansTrackingID: [
+        ansChTrkID: [
           {
             ansID: 'Answer 1',
             ansIndex: 0
@@ -195,7 +195,7 @@ export default {
         nextQuId: '',
         showAnswerLabelError: false
       })
-      this.addTrackAnsId(qIndex)
+      this.addTrackAnsChId(qIndex)
     },
     // This function allows the selected question to be removed. --> Pre-GEN 3
     remRowQs (qIndex) {
@@ -214,19 +214,19 @@ export default {
       }
     },
     // This function allows the selected answer to be removed. --> Pre-GEN 4
-    remRowAns (qIndex, aIndex) {
+    remRowAnsCh (qIndex, aIndex) {
       var pos = this.form.questions[qIndex]
       pos.answerChoices.splice(aIndex, 1)
       // remove the selected index from the answer tracking Array
-      pos.ansTrackingID.splice(aIndex, 1)
+      pos.ansChTrkID.splice(aIndex, 1)
       // In the tracking array, update the question index for those removed AFTER SPLICE
-      var lengthOfTrackerAfterSplice = Object.keys(pos.ansTrackingID).length
+      var lengthOfTrackerAfterSplice = Object.keys(pos.ansChTrkID).length
       if (aIndex < lengthOfTrackerAfterSplice) {
       // If aIndex is NOT LAST, then from aIndex position till last, subtract 1 from values of ansIndex
         var i
         for (i = aIndex; i < lengthOfTrackerAfterSplice; i++) {
-          var fn = pos.ansTrackingID[i].ansIndex - 1
-          pos.ansTrackingID[i].ansIndex = fn
+          var fn = pos.ansChTrkID[i].ansIndex - 1
+          pos.ansChTrkID[i].ansIndex = fn
         }
       }
     },
@@ -270,11 +270,11 @@ export default {
       })
     },
     // This function updates the Answer tracking index. Called by addAnswerChoices() --> Pre-GEN 8
-    addTrackAnsId (qIndex) {
+    addTrackAnsChId (qIndex) {
       var aObj = this.form.questions[qIndex].answerChoices
       // to get last index, need length of object as we always add to last index
       var lastIndexAObj = Object.keys(aObj).length - 1
-      this.form.questions[qIndex].ansTrackingID.push({
+      this.form.questions[qIndex].ansChTrkID.push({
         ansID: this.form.questions[qIndex].answerChoices[lastIndexAObj].answerId,
         ansIndex: lastIndexAObj
       })
