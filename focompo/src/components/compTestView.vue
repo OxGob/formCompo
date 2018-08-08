@@ -1,6 +1,6 @@
 <template>
   <q-page>
-      <h2> the prop is: {{this.testvalFromParent}} </h2>
+      <h6> the prop is: {{this.testvalFromParent}} </h6>
       <!-- QDesPos Tab -->
             <q-card class="bg-light-blue-2 q-ma-xl">
             <q-card-title>Resulting form
@@ -62,13 +62,10 @@
 
 <script>
 export default {
-  props: {
-    testvalFromParent: {
-      type: Object
-    }
-  },
+  props: ['testvalFromParent'],
   data () {
     return {
+      tval: this.testvalFromParent,
       currFIndex: 0,
       currQIndex: 0,
       currAIndex: 0,

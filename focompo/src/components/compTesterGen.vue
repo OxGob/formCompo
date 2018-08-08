@@ -94,17 +94,7 @@ export default {
     return {
       form:
         {
-          // ansRadioVal: '',
-          // answers: [
-          //   {
-          //     questionId: '',
-          //     answerText: '',
-          //     answerId: '',
-          //     timeStamp: ''
-          //   }
-          // ],
           counterGenQuID: 0,
-          // counterAnswers: 0,
           fDescription: '',
           fname: '',
           questions: [
@@ -149,7 +139,6 @@ export default {
               value: 'single'
             }
           ],
-          // tempAnsHolder: '',
           trackQuID: ''
         }
     }

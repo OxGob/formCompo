@@ -11,6 +11,7 @@
             <q-input v-model="formG.formLabel" type="text" align="center" clearable />
           </q-field>
           <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
+          <compoTestV :testvalFromParent='formG'></compoTestV>
           <q-card-separator class="q-mb-md q-mt-lg"/>
         </div>
         <!-- <compTestG1 @chiFoTitle="forms.fname = $event"
@@ -20,7 +21,7 @@
       </q-card-main>
     </q-card>
     <q-card>
-      <compoTestV :testvalFromParent='this.testval'></compoTestV>
+      <!-- <compoTestV :testvalFromParent='this.testval'></compoTestV> -->
     </q-card>
   </q-page>
 </template>
