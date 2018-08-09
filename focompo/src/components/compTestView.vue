@@ -124,7 +124,6 @@ export default {
     initModel () {
       var i, j, k
       this.tval = this.testvalFromParent
-      this.currFIndex = this.tval.indexFo
       var propObj = this.tval.formComponentObj
       var fIndx = this.currFIndex
       var currForm = this.forms[fIndx]
