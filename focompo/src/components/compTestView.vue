@@ -124,31 +124,64 @@ export default {
     initModel () {
       var i, j, k
       this.tval = this.testvalFromParent
-      var propObj = this.tval.formComponentObj
       this.currFIndex = this.tval.indexFo
+      var propObj = this.tval.formComponentObj
       var fIndx = this.currFIndex
       var currForm = this.forms[fIndx]
       currForm.fDescription = propObj.fDescription
       currForm.fname = propObj.fname
       // Need to find values for each question,
-      var lenQ = Object.keys(currForm.questions).length
+      // Get length from prop questions array
+      var lenQ = Object.keys(propObj.questions).length
+      this.$q.notify('i is fired' + lenQ)
       for (i = 0; i < lenQ; i++) {
-        currForm.questions[i].qtext = propObj.questions[i].qtext
-        currForm.questions[i].qHelp = propObj.questions[i].qHelp
-        currForm.questions[i].qId = propObj.questions[i].qId
-        currForm.questions[i].nextDefaultId = propObj.questions[i].nextDefaultId
-        currForm.questions[i].qType = propObj.questions[i].qType
-        // Need to find values for each answer Choice
-        var lenAnsCho = Object.keys(currForm.questions[i].answerChoices).length
+        if (i === 0) {
+          currForm.questions[i].qtext = propObj.questions[i].qtext
+          currForm.questions[i].qHelp = propObj.questions[i].qHelp
+          currForm.questions[i].qId = propObj.questions[i].qId
+          currForm.questions[i].nextDefaultId = propObj.questions[i].nextDefaultId
+          currForm.questions[i].qType = propObj.questions[i].qType
+        } else if (i > 0) {
+          // if more than 1 question, then need to create others
+          currForm.questions.push({
+            qtext: propObj.questions[i].qtext,
+            qHelp: propObj.questions[i].qHelp,
+            qId: propObj.questions[i].qId,
+            nextDefaultId: propObj.questions[i].nextDefaultId,
+            qType: propObj.questions[i].qType,
+            answerChoices: [
+              {
+                answerId: 'Answer 1',
+                text: '',
+                nextQuId: '',
+                showAnswerLabelError: false
+              }
+            ]
+          })
+        }
+        // Need to find values for each answer Choice. Get length from prop Ans Cho array
+        var lenAnsCho = Object.keys(propObj.questions[i].answerChoices).length
         for (j = 0; j < lenAnsCho; j++) {
-          currForm.questions[i].answerChoices[j].answerId = propObj.questions[i].answerChoices[j].answerId
-          currForm.questions[i].answerChoices[j].text = propObj.questions[i].answerChoices[j].text
-          currForm.questions[i].answerChoices[j].nextQuId = propObj.questions[i].answerChoices[j].nextQuId
-          currForm.questions[i].answerChoices[j].showAnswerLabelError = propObj.questions[i].answerChoices[j].showAnswerLabelError
+          if (j === 0) {
+            this.$q.notify('j is ===  0')
+            currForm.questions[i].answerChoices[j].answerId = propObj.questions[i].answerChoices[j].answerId
+            currForm.questions[i].answerChoices[j].text = propObj.questions[i].answerChoices[j].text
+            currForm.questions[i].answerChoices[j].nextQuId = propObj.questions[i].answerChoices[j].nextQuId
+            currForm.questions[i].answerChoices[j].showAnswerLabelError = propObj.questions[i].answerChoices[j].showAnswerLabelError
+          } else if (j > 0) {
+            this.$q.notify('j is more than 0')
+            // if more than 1 answer Choice, then need to create others
+            currForm.questions[i].answerChoices.push({
+              answerId: propObj.questions[i].answerChoices[j].answerId,
+              text: propObj.questions[i].answerChoices[j].text,
+              nextQuId: propObj.questions[i].answerChoices[j].nextQuId,
+              showAnswerLabelError: propObj.questions[i].answerChoices[j].showAnswerLabelError
+            })
+          }
         }
       }
       // Need to find values for tracking Id
-      var lenQTrkId = Object.keys(currForm.qTrackingID).length
+      var lenQTrkId = Object.keys(propObj.qTrackingID).length
       for (k = 0; k < lenQTrkId; k++) {
         currForm.qTrackingID[k].quesID = propObj.qTrackingID[k].quesID
         currForm.qTrackingID[k].quesIndex = propObj.qTrackingID[k].quesIndex
