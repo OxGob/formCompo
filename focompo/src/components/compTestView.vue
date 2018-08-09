@@ -6,6 +6,7 @@
             <q-card-title>Resulting form
               <span slot="subtitle">View the designed form.</span>
               <q-btn class="float-right q-mr-md" color="black" label="load Test JSON" @click="testLoadJSON"/>
+              <q-btn class="q-mr-md" color="green-5" label="Init Model" @click="initModel"/>
             </q-card-title>
             <q-card-separator class="q-mb-md q-mt-xl"/>
             <q-card-main>
@@ -65,7 +66,7 @@ export default {
   props: ['testvalFromParent'],
   data () {
     return {
-      tval: this.testvalFromParent,
+      tval: '',
       currFIndex: 0,
       currQIndex: 0,
       currAIndex: 0,
@@ -115,7 +116,44 @@ export default {
       ]
     }
   },
+  // created () {
+  //   this.$q.notify('creted!')
+  // },
   methods: {
+    // Initialise Model with prop values
+    initModel () {
+      var i, j, k
+      this.tval = this.testvalFromParent
+      var propObj = this.tval.formComponentObj
+      this.currFIndex = this.tval.indexFo
+      var fIndx = this.currFIndex
+      var currForm = this.forms[fIndx]
+      currForm.fDescription = propObj.fDescription
+      currForm.fname = propObj.fname
+      // Need to find values for each question,
+      var lenQ = Object.keys(currForm.questions).length
+      for (i = 0; i < lenQ; i++) {
+        currForm.questions[i].qtext = propObj.questions[i].qtext
+        currForm.questions[i].qHelp = propObj.questions[i].qHelp
+        currForm.questions[i].qId = propObj.questions[i].qId
+        currForm.questions[i].nextDefaultId = propObj.questions[i].nextDefaultId
+        currForm.questions[i].qType = propObj.questions[i].qType
+        // Need to find values for each answer Choice
+        var lenAnsCho = Object.keys(currForm.questions[i].answerChoices).length
+        for (j = 0; j < lenAnsCho; j++) {
+          currForm.questions[i].answerChoices[j].answerId = propObj.questions[i].answerChoices[j].answerId
+          currForm.questions[i].answerChoices[j].text = propObj.questions[i].answerChoices[j].text
+          currForm.questions[i].answerChoices[j].nextQuId = propObj.questions[i].answerChoices[j].nextQuId
+          currForm.questions[i].answerChoices[j].showAnswerLabelError = propObj.questions[i].answerChoices[j].showAnswerLabelError
+        }
+      }
+      // Need to find values for tracking Id
+      var lenQTrkId = Object.keys(currForm.qTrackingID).length
+      for (k = 0; k < lenQTrkId; k++) {
+        currForm.qTrackingID[k].quesID = propObj.qTrackingID[k].quesID
+        currForm.qTrackingID[k].quesIndex = propObj.qTrackingID[k].quesIndex
+      }
+    },
     // Navigation Methods
     // Function called  by button click to return to form builder from Gen view. --> Pos-VIE 1
     goBack () {
