@@ -130,7 +130,7 @@ export default {
       var currForm = this.forms[fIndx]
       currForm.fDescription = propObj.fDescription
       currForm.fname = propObj.fname
-      // Need to find values for each question,
+      // Find values for each question,
       // Get length from prop questions array
       var lenQ = Object.keys(propObj.questions).length
       this.$q.notify('i is fired' + lenQ)
@@ -159,17 +159,15 @@ export default {
             ]
           })
         }
-        // Need to find values for each answer Choice. Get length from prop Ans Cho array
+        // Find values for each answer Choice. Get length from prop Ans Cho array
         var lenAnsCho = Object.keys(propObj.questions[i].answerChoices).length
         for (j = 0; j < lenAnsCho; j++) {
           if (j === 0) {
-            this.$q.notify('j is ===  0')
             currForm.questions[i].answerChoices[j].answerId = propObj.questions[i].answerChoices[j].answerId
             currForm.questions[i].answerChoices[j].text = propObj.questions[i].answerChoices[j].text
             currForm.questions[i].answerChoices[j].nextQuId = propObj.questions[i].answerChoices[j].nextQuId
             currForm.questions[i].answerChoices[j].showAnswerLabelError = propObj.questions[i].answerChoices[j].showAnswerLabelError
           } else if (j > 0) {
-            this.$q.notify('j is more than 0')
             // if more than 1 answer Choice, then need to create others
             currForm.questions[i].answerChoices.push({
               answerId: propObj.questions[i].answerChoices[j].answerId,
@@ -180,11 +178,19 @@ export default {
           }
         }
       }
-      // Need to find values for tracking Id
+      // Find values for tracking Id
       var lenQTrkId = Object.keys(propObj.qTrackingID).length
       for (k = 0; k < lenQTrkId; k++) {
-        currForm.qTrackingID[k].quesID = propObj.qTrackingID[k].quesID
-        currForm.qTrackingID[k].quesIndex = propObj.qTrackingID[k].quesIndex
+        if (k === 0) {
+          currForm.qTrackingID[k].quesID = propObj.qTrackingID[k].quesID
+          currForm.qTrackingID[k].quesIndex = propObj.qTrackingID[k].quesIndex
+        } else if (k > 0) {
+          // if more than 1 answer Choice, then need to create others
+          currForm.qTrackingID.push({
+            quesID: propObj.qTrackingID[k].quesID,
+            quesIndex: propObj.qTrackingID[k].quesIndex
+          })
+        }
       }
     },
     // Navigation Methods
