@@ -10,8 +10,14 @@
           <q-field class="q-mb-sm" label="Form Label: ">
             <q-input v-model="formG.formLabel" type="text" align="center" clearable />
           </q-field>
-          <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
-          <compoTestV :testvalFromParent='formG'></compoTestV>
+          <div v-show=false>
+            <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
+          </div>
+          <div>
+            <compoTestV :testvalFromParent='formG'></compoTestV>
+          </div>
+          <!-- <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
+          <compoTestV :testvalFromParent='formG'></compoTestV> -->
           <q-card-separator class="q-mb-md q-mt-lg"/>
         </div>
         <!-- <compTestG1 @chiFoTitle="forms.fname = $event"
