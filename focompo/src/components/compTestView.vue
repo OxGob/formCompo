@@ -116,9 +116,9 @@ export default {
       ]
     }
   },
-  // created () {
-  //   this.$q.notify('creted!')
-  // },
+  created () {
+    this.initModel()
+  },
   methods: {
     // Initialise Model with prop values
     initModel () {
@@ -195,7 +195,7 @@ export default {
     // Navigation Methods
     // Function called  by button click to return to form builder from Gen view. --> Pos-VIE 1
     goBack () {
-      // this.selectedTab = 'QDes'
+      // On returning to its parent, the formViewer component will be destroyed
       this.$emit('returnToParent')
       this.showNextBtn = true
       this.showFinishBtn = false

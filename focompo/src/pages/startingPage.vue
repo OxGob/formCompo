@@ -14,22 +14,17 @@
           <div v-show="formG.showFormBuilder">
             <compTestG1 @chiObjForm="formG.formComponentObj = $event" @emitOpenFormViewer="displayFormViewer(formInd)"></compTestG1>
           </div>
-          <div v-show="formG.showFormViewer">
-            <!-- Send to component prop   -->
+          <!-- Use v-if so that on the creation of component formViewer, init() can be run in formViewer -->
+          <!-- On returning to its parent, the formViewer component will be destroyed -->
+          <div v-if="formG.showFormViewer">
+            <!-- Send to component prop (:valFromParent). Receive from child (@returnToParent)   -->
             <compoTestV :valFromParent='formG' @returnToParent="displayFormBuilder(formInd)"></compoTestV>
           </div>
-          <!-- <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
-          <compoTestV :valFromParent='formG'></compoTestV> -->
           <q-card-separator class="q-mb-md q-mt-lg"/>
         </div>
-        <!-- <compTestG1 @chiFoTitle="forms.fname = $event"
-         @chiFoDescr="forms.fDescription = $event"
-         @chiObjFo="tesSeveral = $event"></compTestG1> -->
-        <!-- <compTestG1 :forms.fname /> -->
       </q-card-main>
     </q-card>
     <q-card>
-      <!-- <compoTestV :valFromParent='this.testval'></compoTestV> -->
     </q-card>
   </q-page>
 </template>
@@ -66,6 +61,7 @@ export default {
     }
   },
   methods: {
+    // Display Form Sections
     displayFormViewer (index) {
       this.$q.notify('displayFormViewer Called: ')
       this.formsGen[index].showFormBuilder = false
@@ -76,6 +72,7 @@ export default {
       this.formsGen[index].showFormBuilder = true
       this.formsGen[index].showFormViewer = false
     },
+    // Form Row section
     addFormTapped (formInd) {
       this.counterformsGen++
       this.$q.notify('Form added. new counter is: ' + this.counterformsGen)

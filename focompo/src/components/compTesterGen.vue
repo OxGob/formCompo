@@ -76,7 +76,7 @@
               </div>
               <div class="col-1"></div>
               <div class="col-5">
-                <q-btn class="q-mb-md q-mr-md" color="red" icon-right="navigate_next" @click="genFormTapped">Generate the form</q-btn>
+                <q-btn class="q-mb-md q-mr-md" color="red" icon-right="navigate_next" @click="genFormTapped">Preview the form</q-btn>
               </div>
             </div>
           <!-- <div v-show="showGenError=== true">
@@ -409,11 +409,10 @@ export default {
     },
     emitToParentObj () {
       this.$q.notify('emit to Parent as object Fired 2:' + this.form)
-      console.log('Emit fo  Obj is : ', this.form)
+      // console.log('Emit fo  Obj is : ', this.form)
       this.$emit('chiObjForm', this.form)
     },
     openFormViewer () {
-      // this.$emit('emitOpenFormViewer', false)
       this.$emit('emitOpenFormViewer')
     },
     // TESTING METHODS
