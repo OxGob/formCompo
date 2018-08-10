@@ -90,7 +90,6 @@
 
 <script>
 export default {
-  props: ['formTitle'],
   data () {
     return {
       form:

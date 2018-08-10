@@ -131,7 +131,6 @@ export default {
       // Find values for each question,
       // Get length from prop questions array
       var lenQ = Object.keys(propObj.questions).length
-      this.$q.notify('i is fired' + lenQ)
       for (i = 0; i < lenQ; i++) {
         if (i === 0) {
           currForm.questions[i].qtext = propObj.questions[i].qtext
@@ -208,7 +207,9 @@ export default {
     },
     // Function called  by button click --> Pos-VIE 3
     finishForm () {
-      this.$q.notify('Arrived at finish stage!')
+      this.$q.notify('You have completed this form.')
+      // Inform the parent that the formViewer has completed
+      this.$emit('returnToParent')
     },
     // This function is called when the user clicks on the next button.  --> Pos-VIE 4
     nextTapped (quType) {
@@ -364,10 +365,6 @@ export default {
       var tmpH = localStorage.getItem('testCOPDQ')
       var objTm = JSON.parse(tmpH)
       this.forms[this.currFIndex] = objTm
-    },
-    emitToParentObjOnFinish () {
-    // Emit the answers object
-      this.$q.notify('emit to Parent on finish: ')
     }
   }
 }
