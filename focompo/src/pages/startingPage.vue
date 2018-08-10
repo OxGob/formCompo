@@ -10,10 +10,11 @@
           <q-field class="q-mb-sm" label="Form Label: ">
             <q-input v-model="formG.formLabel" type="text" align="center" clearable />
           </q-field>
-          <div v-show=false>
-            <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
+          <!-- GEt flag from emitOpenFormViewer in Form Builder to show formViewer. -->
+          <div v-show="formG.showFormBuilder">
+            <compTestG1 @chiObjForm="formG.formComponentObj = $event" @emitOpenFormViewer="formG.showFormViewer = $event"></compTestG1>
           </div>
-          <div>
+          <div v-show="formG.showFormViewer">
             <compoTestV :testvalFromParent='formG'></compoTestV>
           </div>
           <!-- <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
@@ -50,7 +51,9 @@ export default {
         {
           formLabel: 'form 0',
           formComponentObj: '',
-          indexFo: 0
+          indexFo: 0,
+          showFormBuilder: true,
+          showFormViewer: false
         }
       ],
       formTracker: [

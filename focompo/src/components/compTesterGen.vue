@@ -83,6 +83,7 @@
             <p style="border:3px; border-style:solid;padding: 1em;color:red;">There are errors in this form. Please review that the following fields are valid: question, answer and next question. You won't be able to proceed until this is done.</p>
           </div> -->
             <q-btn class="q-ml-lg" label="Save Form / Fire Obj" color="purple" @click="emitToParentObj"/>
+            <q-btn class="q-ml-lg" label="test 2nd emit" color="pink-3" @click="openFormViewer"/>
         </q-card-main>
     </q-card>
 </template>
@@ -410,6 +411,9 @@ export default {
       this.$q.notify('emit to Parent as object Fired 2:' + this.form)
       console.log('Emit fo  Obj is : ', this.form)
       this.$emit('chiObjForm', this.form)
+    },
+    openFormViewer () {
+      this.$emit('emitOpenFormViewer', true)
     },
     // TESTING METHODS
     // This function is called from the design form
