@@ -1,6 +1,6 @@
 <template>
   <q-page>
-      <h6> the prop is: {{this.testvalFromParent}} </h6>
+      <h6> the prop is: {{this.valFromParent}} </h6>
       <!-- QDesPos Tab -->
             <q-card class="bg-light-blue-2 q-ma-xl">
             <q-card-title>Resulting form
@@ -63,7 +63,7 @@
 
 <script>
 export default {
-  props: ['testvalFromParent'],
+  props: ['valFromParent'],
   data () {
     return {
       tval: '',
@@ -123,7 +123,7 @@ export default {
     // Initialise Model with prop values
     initModel () {
       var i, j, k
-      this.tval = this.testvalFromParent
+      this.tval = this.valFromParent
       var propObj = this.tval.formComponentObj
       var fIndx = this.currFIndex
       var currForm = this.forms[fIndx]

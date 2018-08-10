@@ -2,7 +2,7 @@
   <q-page>
     <q-card class="bg-cyan-2 q-ma-xl">
       <q-card-main>
-        <div v-for="(formG, formInd) in formsg" :key=formG.id>
+        <div v-for="(formG, formInd) in formsGen" :key=formG.id>
           <div class="q-mb-md q-mt-lg">
             <q-btn label="Add Form" color = "amber" @click="addFormTapped(formInd)"/>
             <q-btn class="q-ml-md" v-show="formInd !==0" label="Remove Form" color = "pink" @click="removeForm(formInd)"/>
@@ -10,15 +10,16 @@
           <q-field class="q-mb-sm" label="Form Label: ">
             <q-input v-model="formG.formLabel" type="text" align="center" clearable />
           </q-field>
-          <!-- GEt flag from emitOpenFormViewer in Form Builder to show formViewer. -->
+          <!-- GET flag from emitOpenFormViewer in Form Builder to show formViewer. -->
           <div v-show="formG.showFormBuilder">
-            <compTestG1 @chiObjForm="formG.formComponentObj = $event" @emitOpenFormViewer="formG.showFormViewer = $event"></compTestG1>
+            <compTestG1 @chiObjForm="formG.formComponentObj = $event" @emitOpenFormViewer="displayFormViewer(formInd)"></compTestG1>
           </div>
           <div v-show="formG.showFormViewer">
-            <compoTestV :testvalFromParent='formG'></compoTestV>
+            <!-- Send to component prop   -->
+            <compoTestV :valFromParent='formG'></compoTestV>
           </div>
           <!-- <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
-          <compoTestV :testvalFromParent='formG'></compoTestV> -->
+          <compoTestV :valFromParent='formG'></compoTestV> -->
           <q-card-separator class="q-mb-md q-mt-lg"/>
         </div>
         <!-- <compTestG1 @chiFoTitle="forms.fname = $event"
@@ -28,7 +29,7 @@
       </q-card-main>
     </q-card>
     <q-card>
-      <!-- <compoTestV :testvalFromParent='this.testval'></compoTestV> -->
+      <!-- <compoTestV :valFromParent='this.testval'></compoTestV> -->
     </q-card>
   </q-page>
 </template>
@@ -45,9 +46,9 @@ export default {
   },
   data () {
     return {
-      counterFormsg: 0,
+      counterformsGen: 0,
       testval: [{test: 'sometng29'}],
-      formsg: [
+      formsGen: [
         {
           formLabel: 'form 0',
           formComponentObj: '',
@@ -65,27 +66,37 @@ export default {
     }
   },
   methods: {
+    displayFormViewer (index) {
+      this.$q.notify('displayFormViewer Called: ')
+      this.formsGen[index].showFormBuilder = false
+      this.formsGen[index].showFormViewer = true
+    },
+    displayFormBuilder (index) {
+      this.$q.notify('displayFormBuilder Called: ')
+      this.formsGen[index].showFormBuilder = true
+      this.formsGen[index].showFormViewer = false
+    },
     addFormTapped (formInd) {
       this.counterFormsg++
-      this.$q.notify('Form added. new counter is: ' + this.counterFormsg)
+      this.$q.notify('Form added. new counter is: ' + this.counterformsGen)
       this.addFormRow(formInd)
     },
     removeForm (formInd) {
-      this.formsg.splice(formInd, 1)
+      this.formsGen.splice(formInd, 1)
       this.updtFormTrackerRemove(formInd)
     },
     addFormRow (formInd) {
-      this.formsg.push({
-        formLabel: 'Form ' + this.counterFormsg,
+      this.formsGen.push({
+        formLabel: 'Form ' + this.counterformsGen,
         formComponentObj: '',
-        indexFo: this.counterFormsg
+        indexFo: this.counterformsGen
       })
       this.updtFormTrackerAdd(formInd)
     },
     updtFormTrackerAdd (formInd) {
-      var lastIndexFormObj = this.formsg.length - 1
+      var lastIndexFormObj = this.formsGen.length - 1
       this.formTracker.push({
-        formTkID: this.formsg[lastIndexFormObj].formLabel,
+        formTkID: this.formsGen[lastIndexFormObj].formLabel,
         indexOfForm: lastIndexFormObj
       })
     },

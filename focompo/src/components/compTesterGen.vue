@@ -413,7 +413,8 @@ export default {
       this.$emit('chiObjForm', this.form)
     },
     openFormViewer () {
-      this.$emit('emitOpenFormViewer', true)
+      // this.$emit('emitOpenFormViewer', false)
+      this.$emit('emitOpenFormViewer')
     },
     // TESTING METHODS
     // This function is called from the design form
