@@ -6,7 +6,7 @@
             <q-card-title>Resulting form
               <span slot="subtitle">View the designed form.</span>
               <q-btn class="float-right q-mr-md" color="black" label="load Test JSON" @click="testLoadJSON"/>
-              <q-btn class="q-mr-md" color="green-5" label="Init Model" @click="initModel"/>
+              <!-- <q-btn class="q-mr-md" color="green-5" label="Init Model" @click="initModel"/> -->
             </q-card-title>
             <q-card-separator class="q-mb-md q-mt-xl"/>
             <q-card-main>
@@ -71,7 +71,6 @@ export default {
       currQIndex: 0,
       currAIndex: 0,
       indexToShow: 0,
-      // selectedTab: 'QDes',
       showNextBtn: true,
       showFinishBtn: false,
       forms: [

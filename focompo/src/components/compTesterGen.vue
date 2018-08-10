@@ -72,18 +72,18 @@
         <!-- QDes - final section -->
           <div class="row">
               <div class="col-6">
-                <q-btn class="q-mb-md q-ml-md" color="orange" icon-right="save" @click="saveForm">Save the form locally</q-btn>
+                <q-btn class="q-mb-md q-ml-md" color="orange" icon-right="save" @click="saveForm">Save the form</q-btn>
               </div>
-              <div class="col-1"></div>
-              <div class="col-5">
-                <q-btn class="q-mb-md q-mr-md" color="red" icon-right="navigate_next" @click="genFormTapped">Preview the form</q-btn>
+              <div class="col-0"></div>
+              <div class="col-6">
+                <q-btn class="q-mb-md q-mr-md" color="red" icon-right="navigate_next" @click="genFormTapped">Form Preview</q-btn>
               </div>
             </div>
           <!-- <div v-show="showGenError=== true">
             <p style="border:3px; border-style:solid;padding: 1em;color:red;">There are errors in this form. Please review that the following fields are valid: question, answer and next question. You won't be able to proceed until this is done.</p>
           </div> -->
-            <q-btn class="q-ml-lg" label="Save Form / Fire Obj" color="purple" @click="emitToParentObj"/>
-            <q-btn class="q-ml-lg" label="test 2nd emit" color="pink-3" @click="openFormViewer"/>
+            <!-- <q-btn class="q-ml-lg" label="Save Form / Fire Obj" color="purple" @click="emitToParentObj"/>
+            <q-btn class="q-ml-lg" label="test 2nd emit" color="pink-3" @click="openFormViewer"/> -->
         </q-card-main>
     </q-card>
 </template>
@@ -245,7 +245,8 @@ export default {
     },
     // Function called when generating form. If validation passes, call generateForm () --> Pre-GEN 6
     generateForm () {
-      this.selectedTab = 'QDesPos'
+      this.emitToParentObj()
+      this.openFormViewer()
       this.tabWasLoaded = true
       this.indexToShow = 0
     },
@@ -408,8 +409,6 @@ export default {
       location.reload(true)
     },
     emitToParentObj () {
-      this.$q.notify('emit to Parent as object Fired 2:' + this.form)
-      // console.log('Emit fo  Obj is : ', this.form)
       this.$emit('chiObjForm', this.form)
     },
     openFormViewer () {
@@ -419,6 +418,7 @@ export default {
     // This function is called from the design form
     // and saves a newly created JSON into a local file for testing. --> Pre-GEN 15
     saveForm () {
+      this.emitToParentObj()
       const jsonData = JSON.stringify(this.form)
       console.log('jSON Data is: ', jsonData)
       localStorage.setItem('testCOPDQ', jsonData)
