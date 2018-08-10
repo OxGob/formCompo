@@ -71,7 +71,7 @@ export default {
       currQIndex: 0,
       currAIndex: 0,
       indexToShow: 0,
-      selectedTab: 'QDes',
+      // selectedTab: 'QDes',
       showNextBtn: true,
       showFinishBtn: false,
       forms: [
@@ -195,7 +195,8 @@ export default {
     // Navigation Methods
     // Function called  by button click to return to form builder from Gen view. --> Pos-VIE 1
     goBack () {
-      this.selectedTab = 'QDes'
+      // this.selectedTab = 'QDes'
+      this.$emit('returnToParent')
       this.showNextBtn = true
       this.showFinishBtn = false
       this.reset()

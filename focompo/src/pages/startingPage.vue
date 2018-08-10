@@ -16,7 +16,7 @@
           </div>
           <div v-show="formG.showFormViewer">
             <!-- Send to component prop   -->
-            <compoTestV :valFromParent='formG'></compoTestV>
+            <compoTestV :valFromParent='formG' @returnToParent="displayFormBuilder(formInd)"></compoTestV>
           </div>
           <!-- <compTestG1 @chiObjForm="formG.formComponentObj = $event"></compTestG1>
           <compoTestV :valFromParent='formG'></compoTestV> -->
@@ -77,7 +77,7 @@ export default {
       this.formsGen[index].showFormViewer = false
     },
     addFormTapped (formInd) {
-      this.counterFormsg++
+      this.counterformsGen++
       this.$q.notify('Form added. new counter is: ' + this.counterformsGen)
       this.addFormRow(formInd)
     },
@@ -89,7 +89,9 @@ export default {
       this.formsGen.push({
         formLabel: 'Form ' + this.counterformsGen,
         formComponentObj: '',
-        indexFo: this.counterformsGen
+        indexFo: this.counterformsGen,
+        showFormBuilder: true,
+        showFormViewer: false
       })
       this.updtFormTrackerAdd(formInd)
     },
