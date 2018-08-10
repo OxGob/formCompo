@@ -3,24 +3,26 @@
     <q-card class="bg-cyan-2 q-ma-xl">
       <q-card-main>
         <div v-for="(formG, formInd) in formsGen" :key=formG.id>
-          <div class="q-mb-md q-mt-lg">
-            <q-btn label="Add Form" color = "amber" @click="addFormTapped(formInd)"/>
-            <q-btn class="q-ml-md" v-show="formInd !==0" label="Remove Form" color = "pink" @click="removeForm(formInd)"/>
+          <div v-if="formG.rowExists">
+            <div class="q-mb-md q-mt-lg">
+              <q-btn label="Add Form" color = "amber" @click="addFormTapped(formInd)"/>
+              <q-btn class="q-ml-md" v-show="formInd !==0" label="Remove Form" color = "pink" @click="removeForm(formInd)"/>
+            </div>
+            <q-field class="q-mb-sm" label="Form Label: ">
+              <q-input v-model="formG.formLabel" type="text" align="center" clearable />
+            </q-field>
+            <!-- GET flag from emitOpenFormViewer in Form Builder to show formViewer. -->
+            <div v-show="formG.showFormBuilder">
+              <compTestG1 @chiObjForm="formG.formComponentObj = $event" @emitOpenFormViewer="displayFormViewer(formInd)"></compTestG1>
+            </div>
+            <!-- Use v-if so that on the creation of component formViewer, init() can be run in formViewer -->
+            <!-- On returning to its parent, the formViewer component will be destroyed -->
+            <div v-if="formG.showFormViewer">
+              <!-- Send to component prop (:valFromParent). Receive from child (@returnToParent)   -->
+              <compoTestV :valFromParent='formG' @returnToParent="displayFormBuilder(formInd)"></compoTestV>
+            </div>
+            <q-card-separator class="q-mb-md q-mt-lg"/>
           </div>
-          <q-field class="q-mb-sm" label="Form Label: ">
-            <q-input v-model="formG.formLabel" type="text" align="center" clearable />
-          </q-field>
-          <!-- GET flag from emitOpenFormViewer in Form Builder to show formViewer. -->
-          <div v-show="formG.showFormBuilder">
-            <compTestG1 @chiObjForm="formG.formComponentObj = $event" @emitOpenFormViewer="displayFormViewer(formInd)"></compTestG1>
-          </div>
-          <!-- Use v-if so that on the creation of component formViewer, init() can be run in formViewer -->
-          <!-- On returning to its parent, the formViewer component will be destroyed -->
-          <div v-if="formG.showFormViewer">
-            <!-- Send to component prop (:valFromParent). Receive from child (@returnToParent)   -->
-            <compoTestV :valFromParent='formG' @returnToParent="displayFormBuilder(formInd)"></compoTestV>
-          </div>
-          <q-card-separator class="q-mb-md q-mt-lg"/>
         </div>
       </q-card-main>
     </q-card>
@@ -48,6 +50,7 @@ export default {
           formLabel: 'form 0',
           formComponentObj: '',
           indexFo: 0,
+          rowExists: true,
           showFormBuilder: true,
           showFormViewer: false
         }
@@ -79,7 +82,7 @@ export default {
       this.addFormRow(formInd)
     },
     removeForm (formInd) {
-      this.formsGen.splice(formInd, 1)
+      this.formsGen[formInd].rowExists = false
       this.updtFormTrackerRemove(formInd)
     },
     addFormRow (formInd) {
@@ -87,6 +90,7 @@ export default {
         formLabel: 'Form ' + this.counterformsGen,
         formComponentObj: '',
         indexFo: this.counterformsGen,
+        rowExists: true,
         showFormBuilder: true,
         showFormViewer: false
       })
