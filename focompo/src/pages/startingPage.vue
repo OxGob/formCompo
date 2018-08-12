@@ -6,9 +6,14 @@
         <q-card-separator class="q-mb-sm q-mt-md"/>
         <div v-for="(formG, formInd) in formsGen" :key=formG.id>
           <div v-if="formG.rowExists">
-            <div class="q-mb-md q-mt-lg">
+            <div class="q-mb-md q-mt-md">
               <!-- <q-btn label="Add Form" color = "amber" @click="addFormTapped(formInd)"/> -->
-              <q-btn class="q-ml-md" v-show="formInd !==0" label="Remove Form" color = "pink" @click="removeForm(formInd)"/>
+                <div class="row">
+                  <div class="col-6"></div>
+                  <div class="col-6">
+                    <q-btn class="float-right" label="Remove Form" color = "pink" @click="removeForm(formInd)"/>
+                  </div>
+                </div>
             </div>
             <q-field class="q-mb-sm" label="Form Label: ">
               <q-input v-model="formG.formLabel" type="text" align="center" clearable />
@@ -46,7 +51,7 @@ export default {
   data () {
     return {
       counterformsGen: 0,
-      testval: [{test: 'sometng29'}],
+      removedAllForms: false,
       formsGen: [
         {
           formLabel: 'form 0',
@@ -80,19 +85,35 @@ export default {
     // Form Row section
     addFormTapped () {
       var formInd = this.formsGen.length - 1
-      if (this.counterformsGen === 0) {
-        this.showRowFirstTime = true
-        this.displayFormBuilder(formInd)
-      } else if (this.counterformsGen > 0) {
+      if (this.removedAllForms === true) {
         this.addFormRow()
-        var formInd1 = this.formsGen.length - 1
-        this.displayFormBuilder(formInd1)
+        var formIndRAll = this.formsGen.length - 1
+        this.displayFormBuilder(formIndRAll)
+      } else {
+        if (this.counterformsGen === 0) {
+          this.showRowFirstTime = true
+          this.displayFormBuilder(formInd)
+        } else if (this.counterformsGen > 0) {
+          this.addFormRow()
+          var formInd1 = this.formsGen.length - 1
+          this.displayFormBuilder(formInd1)
+        }
       }
+      this.removedAllForms = false
       this.counterformsGen++
     },
     removeForm (formInd) {
-      this.formsGen[formInd].rowExists = false
-      this.updtFormTrackerRemove(formInd)
+      if (formInd === 0) {
+        this.$q.notify('Removing last form')
+        this.formsGen[formInd].rowExists = false
+        this.formsGen.splice(formInd, 1)
+        this.removedAllForms = true
+        this.updtFormTracker(formInd)
+      } else {
+        this.formsGen[formInd].rowExists = false
+        this.formsGen.splice(formInd, 1)
+        this.updtFormTrackerRemove(formInd)
+      }
     },
     addFormRow () {
       this.formsGen.push({
@@ -105,12 +126,22 @@ export default {
       })
       this.updtFormTrackerAdd()
     },
+    updtFormTracker (formInd) {
+      // at index 0
+      this.formTracker[formInd].formTkID = ''
+      this.formTracker[formInd].indexOfForm = formInd
+    },
     updtFormTrackerAdd () {
       var lastIndexFormObj = this.formsGen.length - 1
-      this.formTracker.push({
-        formTkID: this.formsGen[lastIndexFormObj].formLabel,
-        indexOfForm: lastIndexFormObj
-      })
+      if (this.removedAllForms === false) {
+        this.formTracker.push({
+          formTkID: this.formsGen[lastIndexFormObj].formLabel,
+          indexOfForm: lastIndexFormObj
+        })
+      } else {
+        this.formTracker[0].formTkID = this.formsGen[lastIndexFormObj].formLabel
+        this.formTracker[0].indexOfForm = lastIndexFormObj
+      }
     },
     updtFormTrackerRemove (formInd) {
       var foTk = this.formTracker
