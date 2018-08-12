@@ -235,8 +235,12 @@ export default {
       var lenErrNxtQu = errNxtQu.length
       var lenErrAnChNx = errAnChNx.length
       var lenErrAnChLab = errAnChLab.length
+      var checkFormTitleFailed = false
+      if (this.form.fname === '') {
+        checkFormTitleFailed = true
+      }
 
-      if ((lenErrQu > 0) || (lenErrNxtQu > 0) || (lenErrAnChNx > 0) || (lenErrAnChLab > 0)) {
+      if ((lenErrQu > 0) || (lenErrNxtQu > 0) || (lenErrAnChNx > 0) || (lenErrAnChLab > 0) || (checkFormTitleFailed === true)) {
         // send index for error msgs??
       } else {
         this.generateForm()
