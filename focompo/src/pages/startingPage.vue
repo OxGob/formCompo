@@ -6,29 +6,31 @@
         <q-card-separator class="q-mb-sm q-mt-md"/>
         <div v-for="(formG, formInd) in formsGen" :key=formG.id>
           <div v-if="formG.rowExists">
-            <div class="q-mb-md q-mt-md">
-              <!-- <q-btn label="Add Form" color = "amber" @click="addFormTapped(formInd)"/> -->
+            <div class="q-mb-md q-mt-md" v-show="showRowFirstTime">
                 <div class="row">
-                  <div class="col-6"></div>
-                  <div class="col-6">
+                  <div class="col-5">
+                    <q-btn label="Show/Hide Form Builder" v-show="true" color = "green" @click="toggleFoBu(formInd)"/>
+                  </div>
+                  <div class="col-3"></div>
+                  <div class="col-4">
                     <q-btn class="float-right" label="Remove Form" color = "pink" @click="removeForm(formInd)"/>
                   </div>
                 </div>
+                <q-field class="q-mb-sm" label="Form Label: ">
+                  <q-input v-model="formG.formLabel" type="text" align="center" clearable />
+                </q-field>
+              <!-- GET flag from emitOpenFormViewer in Form Builder to show formViewer. -->
+              <div v-show="formG.showFormBuilder">
+                <compTestG1 @chiObjForm="formG.formComponentObj = $event" @emitOpenFormViewer="displayFormViewer(formInd)"></compTestG1>
+              </div>
+              <!-- Use v-if so that on the creation of component formViewer, init() can be run in formViewer -->
+              <!-- On returning to its parent, the formViewer component will be destroyed -->
+              <div v-if="formG.showFormViewer">
+                <!-- Send to component prop (:valFromParent). Receive from child (@returnToParent)   -->
+                <compoTestV :valFromParent='formG' @returnToParent="displayFormBuilder(formInd)"></compoTestV>
+              </div>
+              <q-card-separator class="q-mb-md q-mt-lg"/>
             </div>
-            <q-field class="q-mb-sm" label="Form Label: ">
-              <q-input v-model="formG.formLabel" type="text" align="center" clearable />
-            </q-field>
-            <!-- GET flag from emitOpenFormViewer in Form Builder to show formViewer. -->
-            <div v-show="formG.showFormBuilder">
-              <compTestG1 @chiObjForm="formG.formComponentObj = $event" @emitOpenFormViewer="displayFormViewer(formInd)"></compTestG1>
-            </div>
-            <!-- Use v-if so that on the creation of component formViewer, init() can be run in formViewer -->
-            <!-- On returning to its parent, the formViewer component will be destroyed -->
-            <div v-if="formG.showFormViewer">
-              <!-- Send to component prop (:valFromParent). Receive from child (@returnToParent)   -->
-              <compoTestV :valFromParent='formG' @returnToParent="displayFormBuilder(formInd)"></compoTestV>
-            </div>
-            <q-card-separator class="q-mb-md q-mt-lg"/>
           </div>
         </div>
       </q-card-main>
@@ -52,14 +54,16 @@ export default {
     return {
       counterformsGen: 0,
       removedAllForms: false,
+      showRowFirstTime: false,
       formsGen: [
         {
           formLabel: 'form 0',
           formComponentObj: '',
           indexFo: 0,
           rowExists: true,
-          showFormBuilder: true,
-          showFormViewer: false
+          showFormBuilder: false,
+          showFormViewer: false,
+          toggleHideFoBld: false
         }
       ],
       formTracker: [
@@ -81,6 +85,16 @@ export default {
       this.$q.notify('displayFormBuilder Called: ')
       this.formsGen[index].showFormBuilder = true
       this.formsGen[index].showFormViewer = false
+      this.toggleHideFoBld = true
+    },
+    toggleFoBu (formInd) {
+      if (this.formsGen[formInd].toggleHideFoBld === false) {
+        this.formsGen[formInd].showFormBuilder = false
+        this.formsGen[formInd].toggleHideFoBld = true
+      } else {
+        this.formsGen[formInd].showFormBuilder = true
+        this.formsGen[formInd].toggleHideFoBld = false
+      }
     },
     // Form Row section
     addFormTapped () {
@@ -122,7 +136,8 @@ export default {
         indexFo: this.counterformsGen,
         rowExists: true,
         showFormBuilder: true,
-        showFormViewer: false
+        showFormViewer: false,
+        toggleHideFoBld: false
       })
       this.updtFormTrackerAdd()
     },
