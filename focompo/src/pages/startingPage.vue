@@ -2,10 +2,12 @@
   <q-page>
     <q-card class="bg-cyan-2 q-ma-xl">
       <q-card-main>
+        <q-btn label="Add Form" color = "primary" @click="addFormTapped"/>
+        <q-card-separator class="q-mb-sm q-mt-md"/>
         <div v-for="(formG, formInd) in formsGen" :key=formG.id>
           <div v-if="formG.rowExists">
             <div class="q-mb-md q-mt-lg">
-              <q-btn label="Add Form" color = "amber" @click="addFormTapped(formInd)"/>
+              <!-- <q-btn label="Add Form" color = "amber" @click="addFormTapped(formInd)"/> -->
               <q-btn class="q-ml-md" v-show="formInd !==0" label="Remove Form" color = "pink" @click="removeForm(formInd)"/>
             </div>
             <q-field class="q-mb-sm" label="Form Label: ">
@@ -76,16 +78,23 @@ export default {
       this.formsGen[index].showFormViewer = false
     },
     // Form Row section
-    addFormTapped (formInd) {
+    addFormTapped () {
+      var formInd = this.formsGen.length - 1
+      if (this.counterformsGen === 0) {
+        this.showRowFirstTime = true
+        this.displayFormBuilder(formInd)
+      } else if (this.counterformsGen > 0) {
+        this.addFormRow()
+        var formInd1 = this.formsGen.length - 1
+        this.displayFormBuilder(formInd1)
+      }
       this.counterformsGen++
-      this.$q.notify('Form added. new counter is: ' + this.counterformsGen)
-      this.addFormRow(formInd)
     },
     removeForm (formInd) {
       this.formsGen[formInd].rowExists = false
       this.updtFormTrackerRemove(formInd)
     },
-    addFormRow (formInd) {
+    addFormRow () {
       this.formsGen.push({
         formLabel: 'Form ' + this.counterformsGen,
         formComponentObj: '',
@@ -94,9 +103,9 @@ export default {
         showFormBuilder: true,
         showFormViewer: false
       })
-      this.updtFormTrackerAdd(formInd)
+      this.updtFormTrackerAdd()
     },
-    updtFormTrackerAdd (formInd) {
+    updtFormTrackerAdd () {
       var lastIndexFormObj = this.formsGen.length - 1
       this.formTracker.push({
         formTkID: this.formsGen[lastIndexFormObj].formLabel,
